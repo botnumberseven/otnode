@@ -26,7 +26,7 @@ notify_telegram "stopping otnode..."
 systemctl stop otnode
 sleep 5
 notify_telegram "starting SQL dump..."
-mysqldump -u root -padmin operationaldb > /blzpool/operationaldb_backup.sql
+mysqldump -u root -padmin operationaldb > /${SRC_POOL}/operationaldb_backup.sql
 
 #capture number of triples in the blazegraph at the source
 mkdir -p /root/blaze_count
@@ -48,7 +48,7 @@ fi
 systemctl stop blazegraph
 sleep 5
 notify_telegram "creating snapshot..."
-zfs snapshot blzpool@${SNAP_NAME}
+zfs snapshot ${SRC_POOL}@${SNAP_NAME}
 notify_telegram "snapshot created"
 
 notify_telegram "starting blazegraph and otnode..."
@@ -135,8 +135,7 @@ EOF
 
 
 # Keep only the 14 most recent snapshots
-zfs list -t snapshot -o name -s creation -H | grep "^blzpool@" | head -n -14 | xargs -r -n1 zfs destroy
-ssh root@"$DST_HOST" "zfs list -t snapshot -o name -s creation -H | grep '^backupzns@' | head -n -14 | xargs -r -n1 zfs destroy"
+zfs list -t snapshot -o name -s creation -H | grep "^${SRC_POOL}@" | head -n -14 | xargs -r -n1 zfs destroy
+ssh root@"$DST_HOST" "zfs list -t snapshot -o name -s creation -H | grep '^${DST_POOL}@' | head -n -14 | xargs -r -n1 zfs destroy"
 
 notify_telegram "✅ *ZFS backup completed successfully* on $(hostname) at $(date)"
-
