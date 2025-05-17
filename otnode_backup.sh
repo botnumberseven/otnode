@@ -96,7 +96,7 @@ fi
 
 #validate jnl on the remote host
 notify_telegram "validating snapshot at the destination..."
-ssh root@backup.ambbot.com DST_POOL="$DST_POOL" SNAP_NAME="$SNAP_NAME" TELEGRAM_BOT_TOKEN="$TELEGRAM_BOT_TOKEN" TELEGRAM_CHAT_ID="$TELEGRAM_CHAT_ID" 'bash -s' <<'EOF'
+ssh root@${DST_HOST} DST_POOL="$DST_POOL" SNAP_NAME="$SNAP_NAME" TELEGRAM_BOT_TOKEN="$TELEGRAM_BOT_TOKEN" TELEGRAM_CHAT_ID="$TELEGRAM_CHAT_ID" 'bash -s' <<'EOF'
 	set -euo pipefail
 	echo "Starting Blazegraph..."
 	systemctl start blazegraph.service
