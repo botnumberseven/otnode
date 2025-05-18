@@ -1,10 +1,11 @@
+#!/bin/bash
 #this is a script which backups up otnode (blazegraph.jnl and operationaldb) from one VPS to another using zfs snapshot, send TG messages and validate jnl file at destination
 #it expects SRC_POOL and DST_POOL to be created in advance
 #blazegraph.jnl to be placed in SRC_POOL
 #blame chatGPT if it destroyed your node
 #before you move jnl file to the pool ensure you set smaller record size 16k or 8k for you pool like this - zfs set recordsize=16K blzpool. Default 128k does not work well for blazegraph workload
 
-#!/bin/bash
+
 set -euo pipefail
 exec > >(tee -a /root/zfs_backup.log) 2>&1
 
